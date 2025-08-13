@@ -30,6 +30,11 @@ jobs:
         run: |
          start /B ngrok.exe authtoken 31FVRSyB653MvWTgNNOGfnKynT8_3Mh6nV5aEpdARHGwVZWWB
          taskkill /F /IM ngrok.exe || echo No existing ngrok process
+         continue-on-error: true
+      - name: Kill existing ngrok 
+        shell: pwsh 
+        run: | 
+         try { taskkill /F /IM ngrok.exe } catch { Write-Host "No existing ngrok process" }  
 
 
       # 5️⃣ RDP ayarları
