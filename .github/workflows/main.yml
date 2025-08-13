@@ -29,8 +29,10 @@ jobs:
           Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
           Set-ItemProperty -Path "HKLM:\System\CurrentControlSet\Control\Terminal Server" -Name "fDenyTSConnections" -Value 0
     
-      - name: Open Tunnel.
-        run: Start-Process Powershell -ArgumentList '-Noexit -Command ".\ngrok\ngrok.exe tcp 3389"'
+      # 6️⃣ Ngrok tünel aç
+      - name: Open Tunnel
+        shell: cmd
+        run: start /B ngrok.exe tcp 3389
 
       - name: Install Python + TFLite
         run: |
