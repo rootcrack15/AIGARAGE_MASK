@@ -1,0 +1,39 @@
+name: Free RDP + TFLite
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    timeout-minutes: 360 # 6 saat
+
+    steps:
+      - name: Download Ngrok
+        run: |
+          Invoke-WebRequest https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-stable-windows-amd64.zip -OutFile ngrok.zip
+          Expand-Archive ngrok.zip
+          .\ngrok\ngrok.exe authtoken $Env:NGROK_AUTH_TOKEN
+
+      - name: Start RDP
+        run: |
+          Set-LocalUser -Name "runneradmin" -Password (ConvertTo-SecureString "Passw0rd!" -AsPlainText -Force)
+          Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
+          Set-ItemProperty -Path "HKLM:\System\CurrentControlSet\Control\Terminal Server" -Name "fDenyTSConnections" -Value 0
+          Start-Process powershell -ArgumentList "ngrok\ngrok.exe tcp 3389" -NoNewWindow
+
+      - name: Install Python + TFLite
+        run: |
+          choco install python -y
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          mkdir C:\Masking
+          Copy-Item masking.py C:\Masking\masking.py
+          Copy-Item model.tflite C:\Masking\model.tflite
+
+      - name: Show RDP info
+        run: |
+          Write-Host "Bağlanmak için: Remote Desktop Client aç"
+          Write-Host "Ngrok panelinde (https://dashboard.ngrok.com) TCP linkini bul"
+          Write-Host "Kullanıcı: runneradmin"
+          Write-Host "Şifre: Passw0rd!"
