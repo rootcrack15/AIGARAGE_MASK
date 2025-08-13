@@ -34,7 +34,9 @@ jobs:
       - name: Kill existing ngrok 
         shell: pwsh 
         run: | 
-         try { taskkill /F /IM ngrok.exe } catch { Write-Host "No existing ngrok process" }  
+         try { taskkill /F /IM ngrok.exe } catch { Write-Host "No existing ngrok process" }
+         exit 0
+
 
 
       # 5️⃣ RDP ayarları
