@@ -7,45 +7,57 @@ jobs:
   build:
     runs-on: windows-latest
     timeout-minutes: 360 # 6 saat
-    
-    
+
     steps:
+      # 1️⃣ Repo'yu çek
       - name: Checkout repo
         uses: actions/checkout@v3
 
+      # 2️⃣ Ngrok indir
       - name: Download Ngrok
+        shell: cmd
         run: |
-          Invoke-WebRequest https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-windows-amd64.zip -OutFile ngrok.zip
+          curl -o ngrok.zip https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-windows-amd64.zip
 
-      - name: Extract Ngrok File.
-        run: Expand-Archive ngrok.zip           
-     
+      # 3️⃣ Ngrok zip’i aç
+      - name: Extract Ngrok File
+        shell: cmd
+        run: 7z x ngrok.zip -y
+
+      # 4️⃣ Token ayarla
       - name: Set Ngrok Auth Token
-        run: .\ngrok\ngrok.exe authtoken 1pOPLimRuIfv2P7hmyFN55jjkE5_6VBEjx9BqpjWXDbb4iX86
-     
+        shell: cmd
+        run: ngrok.exe authtoken 1pOPLimRuIfv2P7hmyFN55jjkE5_6VBEjx9BqpjWXDbb4iX86
+
+      # 5️⃣ RDP ayarları
       - name: Start RDP
+        shell: cmd
         run: |
           net user runneradmin Passw0rd!
-          Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
-          Set-ItemProperty -Path "HKLM:\System\CurrentControlSet\Control\Terminal Server" -Name "fDenyTSConnections" -Value 0
-    
+          powershell -Command "Enable-NetFirewallRule -DisplayGroup 'Remote Desktop'"
+          powershell -Command "Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -Name 'fDenyTSConnections' -Value 0"
+
       # 6️⃣ Ngrok tünel aç
       - name: Open Tunnel
         shell: cmd
         run: start /B ngrok.exe tcp 3389
 
+      # 7️⃣ Python ve TFLite (tensorflow-cpu ile)
       - name: Install Python + TFLite
+        shell: cmd
         run: |
           choco install python -y
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install tensorflow-cpu
           mkdir C:\Masking
-          Copy-Item masking.py C:\Masking\masking.py
-          Copy-Item deeplabv3-xception65.tflite C:\Masking\deeplabv3-xception65.tflite
+          copy masking.py C:\Masking\masking.py
+          copy deeplabv3-xception65.tflite C:\Masking\deeplabv3-xception65.tflite
 
+      # 8️⃣ RDP bilgilerini göster
       - name: Show RDP info
+        shell: cmd
         run: |
-          Write-Host "=== RDP Bağlantı Bilgileri ==="
-          Write-Host "1) https://dashboard.ngrok.com → Status → Tunnels → TCP linkini al"
-          Write-Host "2) Kullanıcı: runneradmin"
-          Write-Host "3) Şifre: Passw0rd!"
+          echo === RDP Bağlantı Bilgileri ===
+          echo 1) https://dashboard.ngrok.com → Status → Tunnels → TCP linkini al
+          echo 2) Kullanıcı: runneradmin
+          echo 3) Şifre: Passw0rd!
