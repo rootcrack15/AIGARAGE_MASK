@@ -10,18 +10,17 @@ jobs:
 
     steps:
       - name: Download Ngrok
-      run: |
-      curl -o ngrok.zip https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-stable-windows-amd64.zip
-      Expand-Archive "ngrok.zip" -DestinationPath "."
-      .\ngrok\ngrok.exe authtoken $Env:NGROK_AUTH_TOKEN
-
+        run: |
+          curl -o ngrok.zip https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-stable-windows-amd64.zip
+          Expand-Archive "ngrok.zip" -DestinationPath "."
+          .\ngrok\ngrok.exe authtoken $Env:NGROK_AUTH_TOKEN
 
       - name: Start RDP
         run: |
-          Set-LocalUser -Name "runneradmin" -Password (ConvertTo-SecureString "Passw0rd!" -AsPlainText -Force)
+          net user runneradmin Passw0rd!
           Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
           Set-ItemProperty -Path "HKLM:\System\CurrentControlSet\Control\Terminal Server" -Name "fDenyTSConnections" -Value 0
-          Start-Process powershell -ArgumentList "ngrok\ngrok.exe tcp 3389" -NoNewWindow
+          Start-Process powershell -ArgumentList ".\ngrok\ngrok.exe tcp 3389" -NoNewWindow
 
       - name: Install Python + TFLite
         run: |
@@ -34,7 +33,7 @@ jobs:
 
       - name: Show RDP info
         run: |
-          Write-Host "Bağlanmak için: Remote Desktop Client aç"
-          Write-Host "Ngrok panelinde (https://dashboard.ngrok.com) TCP linkini bul"
-          Write-Host "Kullanıcı: runneradmin"
-          Write-Host "Şifre: Passw0rd!"
+          Write-Host "=== RDP Bağlantı Bilgileri ==="
+          Write-Host "1) https://dashboard.ngrok.com → Status → Tunnels → TCP linkini al"
+          Write-Host "2) Kullanıcı: runneradmin"
+          Write-Host "3) Şifre: Passw0rd!"
