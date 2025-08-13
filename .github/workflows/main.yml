@@ -28,7 +28,6 @@ jobs:
       - name: Set Ngrok Auth Token
         shell: cmd
         run: |
-          taskkill /F /IM ngrok.exe || echo No existing ngrok process
           ngrok.exe authtoken 31FVRSyB653MvWTgNNOGfnKynT8_3Mh6nV5aEpdARHGwVZWWB
 
       # 5️⃣ RDP ayarları
@@ -42,7 +41,10 @@ jobs:
       # 6️⃣ Ngrok tünel aç
       - name: Open Tunnel
         shell: cmd
-        run: start /B ngrok.exe tcp 3389
+        run: |
+          taskkill /F /IM ngrok.exe || echo No existing ngrok process
+          start /B ngrok.exe tcp 3389
+          
 
       # 7️⃣ Python ve TFLite (tensorflow-cpu ile)
       - name: Install Python + TFLite
