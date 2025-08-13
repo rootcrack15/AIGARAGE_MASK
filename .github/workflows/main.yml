@@ -7,8 +7,12 @@ jobs:
   build:
     runs-on: windows-latest
     timeout-minutes: 360 # 6 saat
-
+    
+    
     steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
       - name: Download Ngrok
         run: |
           Invoke-WebRequest https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-windows-amd64.zip -OutFile ngrok.zip
