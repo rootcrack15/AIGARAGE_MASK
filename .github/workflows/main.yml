@@ -10,17 +10,13 @@ jobs:
 
     steps:
       - name: Download Ngrok
-        shell: cmd
         run: |
           Invoke-WebRequest https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-windows-amd64.zip -OutFile ngrok.zip
+
       - name: Extract Ngrok File.
         run: Expand-Archive ngrok.zip           
-      
       - name: Set Ngrok Auth Token
-        run: |
-          .\ngrok\ngrok.exe authtoken 1pOPLimRuIfv2P7hmyFN55jjkE5_6VBEjx9BqpjWXDbb4iX86
-
-
+        run: .\ngrok\ngrok.exe authtoken 1pOPLimRuIfv2P7hmyFN55jjkE5_6VBEjx9BqpjWXDbb4iX86
       - name: Start RDP
         run: |
           net user runneradmin Passw0rd!
