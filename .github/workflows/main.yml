@@ -28,7 +28,7 @@ jobs:
       - name: Set Ngrok Auth Token
         shell: cmd
         run: |
-          ngrok.exe authtoken 31FVRSyB653MvWTgNNOGfnKynT8_3Mh6nV5aEpdARHGwVZWWB
+         start /B ngrok.exe authtoken 31FVRSyB653MvWTgNNOGfnKynT8_3Mh6nV5aEpdARHGwVZWWB
 
       # 5️⃣ RDP ayarları
       - name: Start RDP
