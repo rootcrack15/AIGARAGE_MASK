@@ -15,16 +15,18 @@ jobs:
 
       - name: Extract Ngrok File.
         run: Expand-Archive ngrok.zip           
+     
       - name: Set Ngrok Auth Token
         run: .\ngrok\ngrok.exe authtoken 1pOPLimRuIfv2P7hmyFN55jjkE5_6VBEjx9BqpjWXDbb4iX86
+     
       - name: Start RDP
         run: |
           net user runneradmin Passw0rd!
           Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
           Set-ItemProperty -Path "HKLM:\System\CurrentControlSet\Control\Terminal Server" -Name "fDenyTSConnections" -Value 0
+    
       - name: Open Tunnel.
-        run: |   
-          Start-Process Powershell -ArgumentList '-Noexit -Command ".\ngrok\ngrok.exe tcp 3389" -NoNewWindow
+        run: Start-Process Powershell -ArgumentList '-Noexit -Command ".\ngrok\ngrok.exe tcp 3389"'
 
       - name: Install Python + TFLite
         run: |
