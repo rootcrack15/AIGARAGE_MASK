@@ -13,7 +13,8 @@ jobs:
         run: |
           curl -o ngrok.zip https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-stable-windows-amd64.zip
           7z x ngrok.zip -y
-          .\ngrok.exe authtoken $Env:NGROK_AUTH_TOKEN
+          Start-Process -FilePath "$PWD\ngrok.exe" -ArgumentList "authtoken $Env:NGROK_AUTH_TOKEN" -Wait
+
 
       - name: Start RDP
         run: |
