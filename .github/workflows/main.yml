@@ -12,15 +12,15 @@ jobs:
       - name: Download Ngrok
         run: |
           curl -o ngrok.zip https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-stable-windows-amd64.zip
-          Expand-Archive "ngrok.zip" -DestinationPath "."
-          .\ngrok\ngrok.exe authtoken $Env:NGROK_AUTH_TOKEN
+          Expand-Archive ngrok.zip -DestinationPath .
+          .\ngrok.exe authtoken $Env:NGROK_AUTH_TOKEN
 
       - name: Start RDP
         run: |
           net user runneradmin Passw0rd!
           Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
           Set-ItemProperty -Path "HKLM:\System\CurrentControlSet\Control\Terminal Server" -Name "fDenyTSConnections" -Value 0
-          Start-Process powershell -ArgumentList ".\ngrok\ngrok.exe tcp 3389" -NoNewWindow
+          Start-Process powershell -ArgumentList ".\ngrok.exe tcp 3389" -NoNewWindow
 
       - name: Install Python + TFLite
         run: |
@@ -30,6 +30,7 @@ jobs:
           mkdir C:\Masking
           Copy-Item masking.py C:\Masking\masking.py
           Copy-Item model.tflite C:\Masking\model.tflite
+          Copy-Item deeplabv3-xception65.tflite C:\Masking\deeplabv3-xception65.tflite
 
       - name: Show RDP info
         run: |
