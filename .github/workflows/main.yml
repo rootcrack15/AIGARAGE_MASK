@@ -38,13 +38,6 @@ jobs:
           powershell -Command "Enable-NetFirewallRule -DisplayGroup 'Remote Desktop'"
           powershell -Command "Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -Name 'fDenyTSConnections' -Value 0"
 
-      # 6️⃣ Ngrok tünel aç
-      - name: Open Tunnel
-        shell: cmd
-        run: |
-          ngrok.exe tcp 3389
-          
-
       # 7️⃣ Python ve TFLite (tensorflow-cpu ile)
       - name: Install Python + TFLite
         shell: cmd
@@ -54,8 +47,8 @@ jobs:
           pip install tensorflow-cpu
           mkdir C:\Masking
           copy masking.py C:\Masking\masking.py
-          copy deeplabv3-xception65.tflite C:\Masking\deeplabv3-xception65.tflite
-
+          copy deeplabv3-xception65.tflite C:\Masking\deeplabv3-xception65.tflite    
+      
       # 8️⃣ RDP bilgilerini göster
       - name: Show RDP info
         shell: cmd
@@ -64,3 +57,8 @@ jobs:
           echo 1) https://dashboard.ngrok.com → Status → Tunnels → TCP linkini al
           echo 2) Kullanıcı: runneradmin
           echo 3) Şifre: Passw0rd!
+      # 6️⃣ Ngrok tünel aç
+      - name: Open Tunnel
+        shell: cmd
+        run: |
+          ngrok.exe tcp 3389
