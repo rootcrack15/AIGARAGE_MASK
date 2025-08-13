@@ -42,8 +42,7 @@ jobs:
       - name: Open Tunnel
         shell: cmd
         run: |
-          taskkill /F /IM ngrok.exe || echo No existing ngrok process
-          start /B ngrok.exe tcp 3389
+          ngrok.exe tcp 3389
           
 
       # 7️⃣ Python ve TFLite (tensorflow-cpu ile)
