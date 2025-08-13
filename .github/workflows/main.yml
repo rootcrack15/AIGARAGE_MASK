@@ -29,6 +29,8 @@ jobs:
         shell: cmd
         run: |
          start /B ngrok.exe authtoken 31FVRSyB653MvWTgNNOGfnKynT8_3Mh6nV5aEpdARHGwVZWWB
+         taskkill /F /IM ngrok.exe || echo No existing ngrok process
+
 
       # 5️⃣ RDP ayarları
       - name: Start RDP
